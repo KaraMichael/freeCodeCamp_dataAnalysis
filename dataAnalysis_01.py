@@ -8,30 +8,32 @@ import sqlite3
 #sys.getsizeof(5)
 
 #Read csv and show structure
-#sales = pd.read_csv('data/sales_data.csv',parse_dates=['Date'])
+sales = pd.read_csv('data/sales_data.csv',parse_dates=['Date'])
+page_views = pd.read_csv('data/fcc-forum-pageviews.csv',parse_dates=['date'], index_col=['date'])
 #conn = sqlite3.connect('data/sakila.db')
 
-df = pd.read_sql('''
-    SELECT
-        rental.rental_id, rental.rental_date, rental.return_date,
-        customer.last_name AS customer_lastname,
-        store.store_id,
-        city.city AS rental_store_city,
-        film.title AS film_title, film.rental_duration AS film_rental_duration,
-        film.rental_rate AS film_rental_rate, film.replacement_cost AS film_replacement_cost,
-        film.rating AS film_rating
-    FROM rental
-    INNER JOIN customer ON rental.customer_id == customer.customer_id
-    INNER JOIN inventory ON rental.inventory_id == inventory.inventory_id
-    INNER JOIN store ON inventory.store_id == store.store_id
-    INNER JOIN address ON store.address_id == address.address_id
-    INNER JOIN city ON address.city_id == city.city_id
-    INNER JOIN film ON inventory.film_id == film.film_id
-    ;
-''', conn, index_col='rental_id', parse_dates=['rental_date', 'return_date'])
+#df = pd.read_sql('''
+#    SELECT
+#        rental.rental_id, rental.rental_date, rental.return_date,
+#        customer.last_name AS customer_lastname,
+#        store.store_id,
+#        city.city AS rental_store_city,
+#        film.title AS film_title, film.rental_duration AS film_rental_duration,
+#        film.rental_rate AS film_rental_rate, film.replacement_cost AS film_replacement_cost,
+#        film.rating AS film_rating
+#    FROM rental
+#    INNER JOIN customer ON rental.customer_id == customer.customer_id
+#    INNER JOIN inventory ON rental.inventory_id == inventory.inventory_id
+#    INNER JOIN store ON inventory.store_id == store.store_id
+#    INNER JOIN address ON store.address_id == address.address_id
+#    INNER JOIN city ON address.city_id == city.city_id
+#    INNER JOIN film ON inventory.film_id == film.film_id
+#    ;
+#''', conn, index_col='rental_id', parse_dates=['rental_date', 'return_date'])
 
-print(df.head())
+#print(df.head())
 #sales.head()
+page_views.head()
 #sales.shape
 #sales.info()
 
