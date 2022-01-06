@@ -5,19 +5,11 @@ import seaborn as sns
 
 #Expercise 1 ---------------------------
 #Read CSV
-page_views_df = pd.read_csv('data/fcc-forum-pageviews.csv',parse_dates=['date'])
-
-#Sorted DF
-sorted_df = page_views_df.sort_values('value')
-
-#2.5% of smallest and biggest values
-remove_len = int(round((len(page_views_df['value'])/100)*2.5,0))
-
-#Cut first and last 33 (2.5%)
-sorted_df_removed = sorted_df.iloc[remove_len:len(page_views_df.sort_values('value'))-remove_len,:]
+df = pd.read_csv('data/fcc-forum-pageviews.csv',parse_dates=['date'])
 
 #Sort again by date
-df1 = sorted_df_removed.sort_values('date')
+df1 = df.drop(df[(df['value']<df['value'].quantile(0.025)) | (df['value']>df['value'].quantile(0.975))].index)
+
 
 #create figure
 fig, axes = plt.subplots()
@@ -55,6 +47,7 @@ df3 = df1.copy()
 df3.reset_index(inplace=True)
 df3['Year'] = pd.DatetimeIndex(df3["date"]).year
 df3['Month'] = pd.DatetimeIndex(df3["date"]).month
+months_2 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 fig, (ax1, ax2) = plt.subplots(1,2, figsize=(20,8))
 
@@ -67,3 +60,4 @@ plt2=sns.boxplot(x='Month',y='value',data=df3, ax=ax2)
 plt2.set_title("Month-wise Box Plot (Trend)")
 plt2.set_xlabel('Month')
 plt2.set_ylabel('Page Views')
+ax2.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
